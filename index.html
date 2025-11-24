@@ -59,50 +59,31 @@
 <body class="bg-slate-100 text-slate-800 antialiased min-h-screen">
     <div id="root"></div>
 
-    <script type="text/babel" data-presets="typescript,react">
+    <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
         // ==========================================
         // 1. TYPES & ENUMS
         // ==========================================
         
-        enum QuestionType {
-            MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
-            FILL_IN_BLANK = 'FILL_IN_BLANK',
-            REARRANGE = 'REARRANGE'
-        }
+        // Defined as objects for better compatibility in standalone script
+        const QuestionType = {
+            MULTIPLE_CHOICE: 'MULTIPLE_CHOICE',
+            FILL_IN_BLANK: 'FILL_IN_BLANK',
+            REARRANGE: 'REARRANGE'
+        };
 
-        enum GameState {
-            START = 'START',
-            PLAYING = 'PLAYING',
-            FINISHED = 'FINISHED'
-        }
-
-        // Interfaces (used for TS checking in Babel, though optional in pure JS)
-        interface Question {
-            id: number;
-            type: QuestionType;
-            questionText: string;
-            correctAnswer: string;
-            explanation: string;
-            options?: string[];
-            rearrangeParts?: string[];
-            audioUrl?: string;
-            imageUrl?: string;
-        }
-
-        interface AnswerResult {
-            questionId: number;
-            isCorrect: boolean;
-            userAnswer: string;
-            correctAnswer: string;
-        }
+        const GameState = {
+            START: 'START',
+            PLAYING: 'PLAYING',
+            FINISHED: 'FINISHED'
+        };
 
         // ==========================================
         // 2. CONSTANTS & DATA
         // ==========================================
 
-        const cleanUrl = (url?: string): string | undefined => {
+        const cleanUrl = (url) => {
             if (!url) return undefined;
             return url.trim()
                 .replace(/\s+/g, '')
@@ -117,7 +98,7 @@
                 .replace(/Audio-mp3/i, 'Audio.mp3');
         };
 
-        const QUIZ_DATA: Question[] = [
+        const QUIZ_DATA = [
             { id: 1, type: QuestionType.FILL_IN_BLANK, questionText: "Tuan _ _ tall and handsome with a smiling face.", correctAnswer: "is", explanation: "Tuan (chủ ngữ số ít) đi với động từ tobe 'is'." },
             { id: 2, type: QuestionType.REARRANGE, questionText: "Sắp xếp câu:", rearrangeParts: ["some", "There are", "behind", "tall trees", "my house."], correctAnswer: "There are some tall trees behind my house.", explanation: "Có vài cây cao ở sau nhà tôi." },
             { id: 3, type: QuestionType.FILL_IN_BLANK, questionText: "You will _ _ fine after taking these medicines.", correctAnswer: "be", explanation: "Sau 'will' là động từ nguyên mẫu (be)." },
